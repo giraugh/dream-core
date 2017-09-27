@@ -8,11 +8,13 @@ module.exports = class System {
     // Set the required components here
   }
 
-  udpate (entities) {
+  update (dt, entities) {
     entities.getWith(this.components).forEach(entity =>
       this.updateEach.apply(
         this,
-        this.components.map(entity.get.bind(entity))
+        [dt].concat(
+          this.components.map(entity.get.bind(entity))
+        )
       )
     )
   }

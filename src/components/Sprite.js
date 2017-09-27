@@ -6,8 +6,12 @@ module.exports = class Sprite {
   }
 
   setImage (src) {
-    this._image = new Image()
-    this._image.src = src
+    if (typeof src === 'string') {
+      this._image = new Image()
+      this._image.src = src
+    } else {
+      this._image = src
+    }
   }
 
   getImage (src) {
