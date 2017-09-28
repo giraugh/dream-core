@@ -1,9 +1,16 @@
 module.exports = class Vector {
   constructor (x, y) {
+    if (x instanceof Vector) {
+      this._x = x.x()
+      this._y = x.y()
+      return
+    }
+
     if (y === undefined) {
       let r = x
-      x = Math.cos(r)
-      y = Math.sin(r)
+      this._x = Math.cos(r)
+      this._y = Math.sin(r)
+      return
     }
 
     this._x = x
@@ -11,14 +18,21 @@ module.exports = class Vector {
   }
 
   set (x, y) {
-    if (y === undefined) {
-      let r = x
-      x = Math.cos(r)
-      y = Math.sin(r)
+    if (x instanceof Vector) {
+      this._x = x.x()
+      this._y = x.y()
+      return
     }
 
-    this._x = x
-    this._y = y
+    if (y === undefined) {
+      let r = x
+      this._x = Math.cos(r)
+      this._y = Math.sin(r)
+      return
+    }
+
+    this._x = x || this._x
+    this._y = y || this._y
   }
 
   add (v) {
