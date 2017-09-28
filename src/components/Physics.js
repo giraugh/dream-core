@@ -14,7 +14,7 @@ module.exports = class Physics {
   }
 
   empty (entities, x1, y1, w1, h1) {
-    let all = entities.concat(this._colliders)
+    let all = entities.concat(this._colliders).filter(entity => entity !== this)
     return all.every(entity => {
       let transform = entity.get('transform')
       let {x, y} = transform.getPosition()
