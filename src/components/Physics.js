@@ -18,7 +18,13 @@ module.exports = class Physics {
 
   velocity () { return this._velocity }
   setVelocity (x, y) { this._velocity.set(x, y) }
-  getVelocity () { return this._velocity.get() }
+  getVelocity () {
+    let {x, y} = this._velocity.get()
+    return {
+      dx: x,
+      dy: y
+    }
+  }
   addVelocity (dx, dy) {
     this.setVelocity(this.velocity().add(new Vector(dx, dy)))
   }
