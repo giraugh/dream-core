@@ -1,4 +1,5 @@
 const Vector = require('../util/Vector.js')
+const rectOverlap = require('../util/rectOverlap.js')
 
 /*
   Collides with other physics objects and with all passed colliders of form;
@@ -12,8 +13,14 @@ module.exports = class Physics {
     this._friction = 0.1
   }
 
-  empty (x, y, w, h) {
-
+  empty (entities, x1, y1, w1, h1) {
+    let all = entities.concat(this._colliders)
+    return all.every(entity => {
+      let transform = entity.get('transform')
+      let {x, y} = transform.getPosition()
+      let {w, h} = transform.getSize()
+      return !rectOverlap(x1, y1, w1, h1, x, y, w, h)
+    })
   }
 
   velocity () { return this._velocity }

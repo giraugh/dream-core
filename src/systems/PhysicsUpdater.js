@@ -7,27 +7,39 @@ module.exports = class PhysicsUpdater extends System {
     this.components = [Transform, Physics]
   }
 
-  updateEach (dt, transform, physics) {
+  update (dt, entities) {
+    let all = entities.getWith(this.components)
+    all.forEach(entity =>
+      this.updateEach.apply(
+        this,
+        [dt, all].concat(
+          this.components.map(entity.get.bind(entity))
+        )
+      )
+    )
+  }
+
+  updateEach (dt, entities, transform, physics) {
     // Get Velocity
     let {x, y} = transform.getPosition()
     let {w, h} = transform.getSize()
     let {dx, dy} = physics.getVelocity()
 
     // Horizontal Update
-    if (physics.empty(x + dx, y, w, h)) {
+    if (physics.empty(entities, x + dx, y, w, h)) {
       transform.addPosition(dx, 0)
     } else {
-      while (physics.empty(x + Math.sign(dx), y, w, h)) {
+      while (physics.empty(entities, x + Math.sign(dx), y, w, h)) {
         transform.addPosition(Math.sign(dx), 0)
       }
       physics.setVelocity(0, null)
     }
 
     // Vertical Update
-    if (physics.empty(x, y + dy, w, h)) {
+    if (physics.empty(entities, x, y + dy, w, h)) {
       transform.addPosition(0, dy)
     } else {
-      while (physics.empty(x, y + Math.sign(dy), w, h)) {
+      while (physics.empty(entities, x, y + Math.sign(dy), w, h)) {
         transform.addPosition(0, Math.sign(dy))
       }
       physics.setVelocity(null, 0)
